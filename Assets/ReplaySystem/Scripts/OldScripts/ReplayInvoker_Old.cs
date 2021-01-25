@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using System.IO;
 
-public class ReplayInvoker
+public class ReplayInvoker_Old : MonoBehaviour
 {
     public Queue<IReplayCommand> commandBuffer;
     public List<IReplayCommand> commandHistory;
@@ -15,25 +15,9 @@ public class ReplayInvoker
         }
     }
     int counter = 0;
-    string name;
-    Transform transform;
-    Animator animator;
-
-    public ReplayInvoker(string name, Animator animator)
+    
+    void Awake()
     {
-        this.animator = animator;
-        init(name);
-    }
-
-    public ReplayInvoker(string name, Transform transform)
-    {
-        this.transform = transform;
-        init(name);
-    }
-
-    void init(string name)
-    {
-        this.name = name;
         commandBuffer = new Queue<IReplayCommand>();
         commandHistory = new List<IReplayCommand>();
         ReplaySystem.FrameHandler += delegate (object a, EventArgs e)
@@ -53,7 +37,21 @@ public class ReplayInvoker
         if (ReplaySystem.GlobalFrame <= 0) return;
         if (commandHistory.Count > ReplaySystem.GlobalFrame) commandHistory[ReplaySystem.GlobalFrame].Play();
     }
-
+    int i = 0;
+    public delegate void Methods();
+    Methods methods;
+    List<IReplayCommand> commadMethodList = new List<IReplayCommand>();
+    public void PlayMethodCommand()
+    {
+        methods = null;
+        if (ReplaySystem.GlobalFrame <= 0) return;
+        if (ReplaySystem.GlobalFrame == commandHistory[i].Frame)
+        {
+            methods += PlayCommand;
+            i++;
+        }
+    }
+    // ReplayMethod wait fix 1221       
     public void RecordCommand(IReplayCommand command)
     {
         while (commandHistory.Count > counter)
@@ -75,9 +73,8 @@ public class ReplayInvoker
         {
             Lines.Add(c.SaveData());
         }
-        System.IO.File.WriteAllLines(ReplaySystem.RecordDataPath + $"/{name}.json", Lines);
+        System.IO.File.WriteAllLines(ReplaySystem.RecordDataPath + $"/{gameObject.name}.json", Lines);
     }
-
     public void SaveAnimatorData()
     {
         if (!Directory.Exists(ReplaySystem.RecordDataPath))
@@ -89,25 +86,25 @@ public class ReplayInvoker
         {
             Lines.Add(c.SaveData());
         }
-        System.IO.File.WriteAllLines(ReplaySystem.RecordDataPath + $"/{name}_Animator.json", Lines);
+        System.IO.File.WriteAllLines(ReplaySystem.RecordDataPath + $"/{gameObject.name}_Animator.json", Lines);
     }
-
     public void LoadAnimatorData()
     {
         commandHistory.Clear();
-        string[] Lines = System.IO.File.ReadAllLines(ReplaySystem.RecordDataPath + $"/{name}_Animator.json");
+
+        string[] Lines = System.IO.File.ReadAllLines(ReplaySystem.RecordDataPath + $"/{gameObject.name}_Animator.json");
         foreach (string str in Lines)
         {
-            IReplayCommand c = new AnimatorCommand(animator);
-            c.LoadData(str);
-            commandHistory.Add(c);
+            // IReplayCommand c = new AnimatorCommand();
+            // c.LoadData(str);
+            // commandHistory.Add(c);
         }
     }
-
     public void LoadTransformData()
     {
         commandHistory.Clear();
-        string[] Lines = System.IO.File.ReadAllLines(ReplaySystem.RecordDataPath + $"/{name}.json");
+
+        string[] Lines = System.IO.File.ReadAllLines(ReplaySystem.RecordDataPath + $"/{gameObject.name}.json");
         foreach (string str in Lines)
         {
             TransformCommand c = new TransformCommand(transform);

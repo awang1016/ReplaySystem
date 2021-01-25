@@ -3,18 +3,20 @@ using System.IO;
 
 public class MethodCommand : IReplayCommand
 {
-    public int Frame = 0;
-    public string Name;
-    public int Index;
-    public MethodCommand(string Name)
+    public delegate void Method();
+    public int Frame { get; set; }
+    public Method mMethod;
+    public MethodCommand(Method mMethod)
     {
-        this.Name = Name;
-        this.Frame = ReplaySystem.GlobalFrame;
+        this.mMethod += mMethod;
     }
-    public void Record() { }
+    public void Record()
+    {
+        Frame = ReplaySystem.GlobalFrame;
+    }
     public void Play()
     {
-        File.AppendAllText(ReplaySystem.RecordDataPath + Name, JsonUtility.ToJson(this, true));
+        this.mMethod.Invoke();
     }
     public string SaveData() { return JsonUtility.ToJson(this, true); }
     public void LoadData(string Data) { }

@@ -2,6 +2,7 @@
 
 public class TransformCommand : IReplayCommand
 {
+    public int Frame { get; set;}
     public Transform Target;
     TransformCommand transformCommand;
     public Vector3 position;

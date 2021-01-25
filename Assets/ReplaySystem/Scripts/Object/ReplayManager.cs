@@ -16,9 +16,9 @@ public class ReplayManager : Replayable
     {
         ReplaySystem.RecordDataPath = Path + FolderName + "\\";
         replayTimer = gameObject.GetComponent<ReplayTimer>();
-        foreach (Replayable temp in Resources.FindObjectsOfTypeAll<Replayable>())
+        foreach (Replayable temp in GameObject.FindObjectsOfType<Replayable>())
         {
-            if (temp != this) ReplayList.Add(temp);
+            if (this != temp) ReplayList.Add(temp);
         }
         ChangeState(State.Live);
     }

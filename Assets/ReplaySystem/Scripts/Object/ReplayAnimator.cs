@@ -1,16 +1,16 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
-//This script that can add the Command to Invoker to record,play,save,load data.
+[RequireComponent(typeof(Animator))]
 // [RequireComponent(typeof(ReplayInvoker))]
-public class ReplayTransform : Replayable
+public class ReplayAnimator : Replayable
 {
     ReplayInvoker replayInvoker;
-
+    Animator animator;
     void Awake()
     {
-        // replayInvoker = gameObject.GetComponent<ReplayInvoker>();
-        replayInvoker = new ReplayInvoker(gameObject.name, transform);
+        animator = gameObject.GetComponent<Animator>();
+        replayInvoker = new ReplayInvoker(gameObject.name, animator);
         ReplaySystem.FrameHandler += ReplaySwitch;
     }
 
@@ -21,7 +21,7 @@ public class ReplayTransform : Replayable
             case State.Live:
                 break;
             case State.Record:
-                replayInvoker.RecordCommand(new TransformCommand(transform));
+                replayInvoker.RecordCommand(new AnimatorCommand(animator));
                 break;
             case State.Rewind:
                 break;
@@ -38,11 +38,11 @@ public class ReplayTransform : Replayable
 
     public override void SaveData()
     {
-        replayInvoker.SaveTransformData();
+        replayInvoker.SaveAnimatorData();
     }
 
     public override void LoadData()
     {
-        replayInvoker.LoadTransformData();
+        replayInvoker.LoadAnimatorData();
     }
 }
