@@ -2,14 +2,12 @@
 using UnityEngine;
 
 //This script that can add the Command to Invoker to record,play,save,load data.
-// [RequireComponent(typeof(ReplayInvoker))]
 public class ReplayTransform : Replayable
 {
     ReplayInvoker replayInvoker;
 
     void Awake()
     {
-        // replayInvoker = gameObject.GetComponent<ReplayInvoker>();
         replayInvoker = new ReplayInvoker(gameObject.name, transform);
         ReplaySystem.FrameHandler += ReplaySwitch;
     }

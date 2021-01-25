@@ -2,7 +2,6 @@
 using System;
 
 [RequireComponent(typeof(Animator))]
-// [RequireComponent(typeof(ReplayInvoker))]
 public class ReplayAnimator : Replayable
 {
     ReplayInvoker replayInvoker;

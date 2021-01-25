@@ -3,7 +3,7 @@
 public class TransformCommand : IReplayCommand
 {
     public int Frame { get; set;}
-    public Transform Target;
+    Transform Target;
     TransformCommand transformCommand;
     public Vector3 position;
     public Vector3 eulerAngles;
