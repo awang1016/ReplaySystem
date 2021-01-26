@@ -34,9 +34,14 @@ public class ReplayTimer : MonoBehaviour
     {
         ReplaySystem.UpdateFrame();
         ReplaySystem.GlobalFrame = _Frame;
-        ReplaySystem.GlobalTime = _Time;
+        // ReplaySystem.GlobalTime = _Time;
         if (replayManager._State == Replayable.State.Stop) return;
-        _Time += timePerFrame;
+        // _Time += timePerFrame;
         _Frame++;
+    }
+    private void Update()
+    {
+        ReplaySystem.GlobalTime = _Time;
+        _Time += Time.deltaTime;
     }
 }

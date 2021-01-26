@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/test.unity
-    guid: 43bcd7312bbacfe46b7a2b0c73f89b7c
+    path: Assets/ReplaySystem/Scenes/ReplayMicVoice.unity
+    guid: 32ffa48a9e0752e45a64a8363b25f243
   m_configObjects: {}
